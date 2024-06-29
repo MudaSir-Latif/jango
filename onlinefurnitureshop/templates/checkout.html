@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-50">
+        <div class="container">
+            <h4>Cart
+                <span class="price" style="color:black">
+                    <i class="fa fa-shopping-cart"></i>
+                    <b>4</b>
+                </span>
+            </h4>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td><a href="#">Product 1</a></td>
+                    <td><img src="path_to_image1.jpg" alt="Product 1" style="width:50px;height:50px;"></td>
+                    <td>1</td>
+                    <td>$15</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Product 2</a></td>
+                    <td><img src="path_to_image2.jpg" alt="Product 2" style="width:50px;height:50px;"></td>
+                    <td>2</td>
+                    <td>$5</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Product 3</a></td>
+                    <td><img src="path_to_image3.jpg" alt="Product 3" style="width:50px;height:50px;"></td>
+                    <td>1</td>
+                    <td>$8</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Product 4</a></td>
+                    <td><img src="path_to_image4.jpg" alt="Product 4" style="width:50px;height:50px;"></td>
+                    <td>3</td>
+                    <td>$2</td>
+                </tr>
+            </table>
+            <hr>
+            <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
+        </div>
+    </div>
+
+    <div class="col-50">
+        <div class="container">
+            <form action="/action_page.php">
+                <div class="row">
+                    <div class="col-25">
+                        <h3>Billing Address</h3>
+                        <label for="fname"><i class="fa fa-user"></i> Full Name: <span>Mudassir</span></label>
+                        <label for="email"><i class="fa fa-envelope"></i> Email: <span>Mudassir@gmail.com</span></label>
+                        <label for="adr"><i class="fa fa-address-card-o"></i> Address: <span>R-867 block p</span></label>
+                        <label for="city"><i class="fa fa-institution"></i> City: <span>Karachi</span></label>
+                        <label for="zip">Zip: <span>2200890</span></label>
+                    </div>
+                    {% comment %} 
+                    <div class="col-20">
+                        <h3>Payment</h3>
+                        <label for="fname">Accepted Cards</label>
+                        <div class="icon-container">
+                            <i class="fa fa-cc-visa" style="color:navy;"></i>
+                            <i class="fa fa-cc-amex" style="color:blue;"></i>
+                            <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                            <i class="fa fa-cc-discover" style="color:orange;"></i>
+                        </div>
+                        <label for="cname">Name on Card</label>
+                        <label for="ccnum">Credit card number</label>
+                        <label for="expmonth">Exp Month</label>
+                        <div class="row">
+                            <div class="col-50">
+                                <label for="expyear">Exp Year</label>
+                            </div>
+                            <div class="col-50">
+                                <label for="cvv">CVV</label>
+                            </div>
+                        </div>
+                    </div> 
+                    {% endcomment %}
+                </div>
+                <label>
+                    shipping address same as billing
+                </label>
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
