@@ -1,12 +1,12 @@
 from django.db import models
 
- 
+# Create your models here.
+
 class Colour(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.name
-
 
 
 class Size(models.Model):
@@ -28,7 +28,6 @@ class Product(models.Model):
         return self.title
     
 
-
 class Cart(models.Model):
     cart_id = models.AutoField(primary_key=True)
     quantity = models.IntegerField(default=1)  # Assuming default quantity is 1
@@ -36,8 +35,6 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart ID: {self.cart_id}, Product: {self.product.title}, Quantity: {self.quantity}"    
-
-
 
 
 class Supplier(models.Model):
@@ -50,7 +47,6 @@ class Supplier(models.Model):
         return f"Supplier ID: {self.supplier_id}, Name: {self.name}, Contact Number: {self.contact_number}"
 
 
-
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
     delivery_status = models.CharField(max_length=100)
@@ -61,7 +57,3 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order ID: {self.order_id}, Status: {self.delivery_status}, Date: {self.order_date}, Amount: {self.total_amount}"
-
-
-
-
