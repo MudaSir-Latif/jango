@@ -1,38 +1,11 @@
 {% extends "layout.html" %}
+{% load static %}
+
  <style>body{  background: #45a049;
 }</style>
 
-  {% block content %}
-  <section id="feature" class="section-p1">
-   <div class="fe-box">
-     <img src="../static/img/features/f1.png" alt="" />
-     <h6>Free Shipping</h6>
-   </div>
-   <div class="fe-box">
-     <img src="../static/img/features/f2.png" alt="" />
-     <h6>Online Order</h6>
-   </div>
-   <div class="fe-box">
-     <img src="../static/img/features/f3.png" alt="" />
-     <h6>Save Money</h6>
-   </div>
-   <div class="fe-box">
-     <img src="../static/img/features/f4.png" alt="" />
-     <h6>Promotions</h6>
-   </div>
-   <div class="fe-box">
-     <img src="../static/img/features/f5.png" alt="" />
-     <h6>Happy Sell</h6>
-   </div>
-   <div class="fe-box">
-     <img src="../static/img/features/f6.png" alt="" />
-     <h6>Support</h6>
-   </div>
- </section>
- <section id="product1" class="section-p1">
-   <h2>Featured Products</h2>
-   <div class="pro-container">
-     <div class="pro">
+
+{% comment "" %}     <div class="pro">
        <a href="/shop/product"><img src="../static/img/products/2.jpg" alt="" /></a>
        <div class="des">
          <span>adidas</span>
@@ -95,16 +68,59 @@
        </div>
        <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
      </div>
-     <div class="pro">
-       <a href="/shop/product"><img src="../static/img/products/9.jpg" alt="" /></a>
-       <div class="des">
-         <span>adidas</span>
-         <h5>Cartoon Astronaut T-Shirts</h5>
-         <h4>$78</h4>
-       </div>
-       <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-     </div>
+{% endcomment %}
+
+
+
+  {% block content %}
+  <section id="feature" class="section-p1">
+   <div class="fe-box">
+     <img src="../static/img/features/f1.png" alt="" />
+     <h6>Free Shipping</h6>
    </div>
+   <div class="fe-box">
+     <img src="../static/img/features/f2.png" alt="" />
+     <h6>Online Order</h6>
+   </div>
+   <div class="fe-box">
+     <img src="../static/img/features/f3.png" alt="" />
+     <h6>Save Money</h6>
+   </div>
+   <div class="fe-box">
+     <img src="../static/img/features/f4.png" alt="" />
+     <h6>Promotions</h6>
+   </div>
+   <div class="fe-box">
+     <img src="../static/img/features/f5.png" alt="" />
+     <h6>Happy Sell</h6>
+   </div>
+   <div class="fe-box">
+     <img src="../static/img/features/f6.png" alt="" />
+     <h6>Support</h6>
+   </div>
+ </section>
+
+ <section id="product1" class="section-p1">
+   <h2>Featured Products</h2>
+  <div class="pro-container"> 
+    {% for product in products %}
+    <div class="pro">
+        <a href="/shop/product/{{ product.product_id }}">
+            {% if product.images.all %}
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" />
+            {% else %}
+            <img src="{% static 'img/products/default.jpg' %}" alt="Default Image" />
+            {% endif %}
+        </a>
+        <div class="des">
+            <span>{{ product.title }}</span>
+            <h5>{{ product.description }}</h5>
+            <h4>${{ product.price }}</h4>
+        </div>
+        <a href="/cart"><i class="fal fa-shopping-cart cart"></i></a>
+    </div>
+    {% endfor %}  
+  </div>
  </section>
  
   {% endblock  %}

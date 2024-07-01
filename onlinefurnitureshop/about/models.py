@@ -2,30 +2,43 @@ from django.db import models
 
 # Create your models here.
 
-class Colour(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Size(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-
-    def __str__(self):
-        return self.name
-
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     stock = models.IntegerField()
     title = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    colours = models.ManyToManyField(Colour, blank=True)
-    sizes = models.ManyToManyField(Size, blank=True)
 
     def __str__(self):
         return self.title
+
+class Colour(models.Model):
+    colour_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    colour = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.colour
+
+
+class Image(models.Model):
+    image_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='product_images/')
+
+
+    def __str__(self):
+        return f"Image for {self.product.title}"
+
+class Size(models.Model):
+    size_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.size_id
+
+
     
 
 class Cart(models.Model):
