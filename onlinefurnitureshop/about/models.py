@@ -6,6 +6,9 @@ class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     stock = models.IntegerField()
     title = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    waranty = models.CharField(max_length=100,null=True, blank=True, default=None)
+    discount = models.CharField(max_length=100,null=True, blank=True, default=None)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
 

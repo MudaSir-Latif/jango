@@ -20,6 +20,7 @@ from . import views
 
 
 urlpatterns = [
-    path('category/',views.shop,name='category'),
-    path('product/',views.product,name='product')
+    path('',views.shop,name='category'),
+    # path('product/',views.product,name='product')
+    path('product/<int:product_id>/', views.product, name='product'),
 ]
