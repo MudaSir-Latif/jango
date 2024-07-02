@@ -21,4 +21,8 @@ from . import views
 
 urlpatterns = [
     path('',views.cart,name='cart'),
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    # Add other URL patterns here
 ]
+
+
