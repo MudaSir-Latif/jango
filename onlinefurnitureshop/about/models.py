@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -46,11 +47,25 @@ class Size(models.Model):
 
 class Cart(models.Model):
     cart_id = models.AutoField(primary_key=True)
-    quantity = models.IntegerField(default=1)  # Assuming default quantity is 1
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, default=1)  # Assuming user ID 1 exists
 
     def __str__(self):
-        return f"Cart ID: {self.cart_id}, Product: {self.product.title}, Quantity: {self.quantity}"    
+        return f"Cart ID: {self.cart_id}"
+
+class CartItem(models.Model):
+    cart_item_id = models.AutoField(primary_key=True)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    colour = models.ForeignKey(Colour, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"CartItem ID: {self.cart_item_id}, Product: {self.product.title}, Quantity: {self.quantity}"
+
+    def get_total_price(self):
+        return self.product.price * self.quantity
+    
 
 
 class Supplier(models.Model):

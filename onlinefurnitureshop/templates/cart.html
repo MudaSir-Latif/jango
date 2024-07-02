@@ -1,4 +1,8 @@
 {% extends "layout.html" %}
+{% comment %} {% load multiply_filters %} {% endcomment %}
+
+
+{% comment %} 
 
 {% block content %}
 
@@ -67,4 +71,57 @@
     </div>
 </section>
 
-{% endblock  %}
+{% endblock  %} {% endcomment %}
+
+
+{% block content %}
+
+<section id="cart" class="section-p1">
+    <table width="100%">
+        <thead>
+            <tr>
+                <td>Remove</td>
+                <td>Image</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Quantity</td>
+                <td>Subtotal</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td><a href="{% url 'remove_from_cart' item.id %}"><i class="far fa-times-circle"></i></a></td>
+                <td><img src="{{ item.product.image.url }}" alt="{{ item.product.title }}"></td>
+                <td>{{ item.product.title }}</td>
+                <td>${{ item.product.price }}</td>
+                <td><input type="number" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}"></td>
+                {% comment %} <td>${{ item.quantity|multiply:item.product.price }}</td> {% endcomment %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section id="cart-add" class="section-p1">
+    <div id="sudtotal">
+        <h3>Cart Totals</h3>
+        <table>
+            <tr>
+                <td>Cart Subtotal</td>
+                <td>${{ cart_subtotal }}</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td>Free</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>${{ cart_total }}</strong></td>
+            </tr>
+        </table>
+        <a href="{% url 'checkout' %}"><button class="normal">Proceed to checkout</button></a>
+    </div>
+</section>
+
+{% endblock %}

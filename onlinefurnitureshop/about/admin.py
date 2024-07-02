@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Colour, Image, Size, Cart, Supplier, Order
+from .models import Product, Colour, Image, Size, Cart, Supplier, Order,CartItem
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_id', 'title', 'category', 'price', 'stock', 'waranty', 'discount', 'description')
@@ -22,10 +22,21 @@ class SizeAdmin(admin.ModelAdmin):
     search_fields = ('size', 'product__title')
     list_filter = ('size',)
 
-class CartAdmin(admin.ModelAdmin):
-    list_display = ('cart_id', 'product', 'quantity')
-    search_fields = ('product__title', 'cart_id')
-    list_filter = ('quantity',)
+from django.contrib import admin
+from .models import Cart
+
+# class CartAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'product_name', 'quantity_display')
+
+#     def product_name(self, obj):
+#         return obj.product.title
+
+#     def quantity_display(self, obj):
+#         return obj.quantity
+
+#     product_name.short_description = 'Product Name'
+#     quantity_display.short_description = 'Quantity'
+
 
 class SupplierAdmin(admin.ModelAdmin):
     list_display = ('supplier_id', 'name', 'contact_number')
@@ -42,6 +53,7 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Colour, ColourAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Size, SizeAdmin)
-admin.site.register(Cart, CartAdmin)
+admin.site.register(Cart)
+admin.site.register(CartItem)
 admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Order, OrderAdmin)
