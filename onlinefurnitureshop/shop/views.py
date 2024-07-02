@@ -11,7 +11,7 @@ def shop(request):
     else:
         products = Product.objects.all()
 
-    paginator = Paginator(products, 4)  
+    paginator = Paginator(products, 8)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -22,7 +22,69 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     
     if request.method == 'POST':
-        form = AddToCartForm(request.POST)
+        form = AddToCartForm(request.POST, product_id=product_id)
+        if form.is_valid():
+            size = form.cleaned_data['size']
+            colour = form.cleaned_data['colour']
+            quantity = form.cleaned_data['quantity']
+            
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart, product=product, size=size, colour=colour,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                cart_item.quantity += quantity
+                cart_item.save()
+            
+            # Update product stock
+            product.stock -= quantity
+            product.save()
+            
+            return redirect('cart')  # Redirect to the cart page after adding item
+    else:
+        form = AddToCartForm(product_id=product_id)
+
+    context = {
+        'product': product,
+        'form': form,
+    }
+    return render(request, 'product.html', context)
+
+# def add_to_cart(request, product_id):
+#     product = get_object_or_404(Product, pk=product_id)
+    
+#     if request.method == 'POST':
+#         form = AddToCartForm(request.POST)
+#         if form.is_valid():
+#             size = form.cleaned_data['size']
+#             colour = form.cleaned_data['colour']
+#             quantity = form.cleaned_data['quantity']
+            
+#             cart, created = Cart.objects.get_or_create(user=request.user)
+#             cart_item, created = CartItem.objects.get_or_create(
+#                 cart=cart, product=product, size=size, colour=colour,
+#                 defaults={'quantity': quantity}
+#             )
+#             if not created:
+#                 cart_item.quantity += quantity
+#                 cart_item.save()
+            
+#             return redirect('cart')  # Redirect to the cart page after adding item
+#     else:
+#         form = AddToCartForm()
+
+#     context = {
+#         'product': product,
+#         'form': form,
+#     }
+#     return render(request, 'product.html', context)
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = AddToCartForm(request.POST, product_id=product_id)
         if form.is_valid():
             size = form.cleaned_data['size']
             colour = form.cleaned_data['colour']
@@ -39,7 +101,7 @@ def add_to_cart(request, product_id):
             
             return redirect('cart')  # Redirect to the cart page after adding item
     else:
-        form = AddToCartForm()
+        form = AddToCartForm(product_id=product_id)
 
     context = {
         'product': product,
@@ -47,35 +109,34 @@ def add_to_cart(request, product_id):
     }
     return render(request, 'product.html', context)
 
-
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+# def product_detail(request, product_id):
+#     product = get_object_or_404(Product, pk=product_id)
     
-    if request.method == 'POST':
-        form = AddToCartForm(request.POST)
-        if form.is_valid():
-            size = form.cleaned_data['size']
-            colour = form.cleaned_data['colour']
-            quantity = form.cleaned_data['quantity']
+#     if request.method == 'POST':
+#         form = AddToCartForm(request.POST)
+#         if form.is_valid():
+#             size = form.cleaned_data['size']
+#             colour = form.cleaned_data['colour']
+#             quantity = form.cleaned_data['quantity']
             
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            cart_item, created = CartItem.objects.get_or_create(
-                cart=cart, product=product, size=size, colour=colour,
-                defaults={'quantity': quantity}
-            )
-            if not created:
-                cart_item.quantity += quantity
-                cart_item.save()
+#             cart, created = Cart.objects.get_or_create(user=request.user)
+#             cart_item, created = CartItem.objects.get_or_create(
+#                 cart=cart, product=product, size=size, colour=colour,
+#                 defaults={'quantity': quantity}
+#             )
+#             if not created:
+#                 cart_item.quantity += quantity
+#                 cart_item.save()
             
-            return redirect('add_to_cart')  # Use the name of your cart URL here
-    else:
-        form = AddToCartForm()
+#             return redirect('add_to_cart')  # Use the name of your cart URL here
+#     else:
+#         form = AddToCartForm()
 
-    context = {
-        'product': product,
-        'form': form,
-    }
-    return render(request, 'product.html', context)
+#     context = {
+#         'product': product,
+#         'form': form,
+#     }
+#     return render(request, 'product.html', context)
 
 
 # old code

@@ -72,9 +72,8 @@
 </section>
 
 {% endblock  %} {% endcomment %}
-
+{% load static %}
 {% block content %}
-
 <section id="cart" class="section-p1">
     <table width="100%">
         <thead>
@@ -94,7 +93,7 @@
                 <td><img src="{{ item.product.images.first.image.url }}" alt="{{ item.product.title }}"></td>
                 <td>{{ item.product.title }}</td>
                 <td>${{ item.product.price }}</td>
-                <td><input type="number" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}"></td>
+                <td>{{ item.quantity }}</td>
                 <td>${{ item.get_total_price }}</td>
             </tr>
             {% endfor %}
@@ -122,5 +121,4 @@
         <a href="{% url 'checkout' %}"><button class="normal">Proceed to checkout</button></a>
     </div>
 </section>
-
 {% endblock %}

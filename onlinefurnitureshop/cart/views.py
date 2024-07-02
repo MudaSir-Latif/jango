@@ -28,5 +28,10 @@ def cart(request):
 @login_required
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, cart_item_id=item_id, cart__user=request.user)
+    
+    # Update product stock
+    cart_item.product.stock += cart_item.quantity
+    cart_item.product.save()
+    
     cart_item.delete()
     return redirect('cart')

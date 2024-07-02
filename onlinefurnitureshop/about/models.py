@@ -19,10 +19,10 @@ class Product(models.Model):
 class Colour(models.Model):
     colour_id = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    colour = models.CharField(max_length=30, unique=True)
+    colour = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"Color_id: {self.colour}"
+        return self.colour
 
 
 class Image(models.Model):
@@ -37,10 +37,10 @@ class Image(models.Model):
 class Size(models.Model):
     size_id = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    size = models.CharField(max_length=30, unique=True)
+    size = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"Cart ID: {self.size_id}"
+        return self.size
 
 
     
