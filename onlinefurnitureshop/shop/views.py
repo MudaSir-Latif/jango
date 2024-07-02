@@ -1,21 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from about.models import Product
+from django.shortcuts import render, get_object_or_404,redirect
+from about.models import Product,Cart,CartItem
 from django.core.paginator import Paginator
-
-# def shop(request):
-#     # return render (request,'shop.html')
-#     category = request.GET.get('category', None)
-#     if category:
-#         products = Product.objects.filter(category=category)
-#     else:
-#         products = Product.objects.all()
-
-#     paginator = Paginator(products, 1)  # Show 10 products per page
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-
-#     return render(request, 'shop.html', {'page_obj': page_obj})
-#     # return render(request, 'shop.html', {'products': products})
+from .forms import AddToCartForm
 
 
 def shop(request):
@@ -32,12 +18,90 @@ def shop(request):
     return render(request, 'shop.html', {'page_obj': page_obj, 'category': category})
 
 
-# def product(request):
-#     return render (request,'product.html')
-
-def product(request, product_id):
+def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = AddToCartForm(request.POST)
+        if form.is_valid():
+            size = form.cleaned_data['size']
+            colour = form.cleaned_data['colour']
+            quantity = form.cleaned_data['quantity']
+            
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart, product=product, size=size, colour=colour,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                cart_item.quantity += quantity
+                cart_item.save()
+            
+            return redirect('cart')  # Redirect to the cart page after adding item
+    else:
+        form = AddToCartForm()
+
     context = {
-        'product': product
+        'product': product,
+        'form': form,
     }
     return render(request, 'product.html', context)
+
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = AddToCartForm(request.POST)
+        if form.is_valid():
+            size = form.cleaned_data['size']
+            colour = form.cleaned_data['colour']
+            quantity = form.cleaned_data['quantity']
+            
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart, product=product, size=size, colour=colour,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                cart_item.quantity += quantity
+                cart_item.save()
+            
+            return redirect('add_to_cart')  # Use the name of your cart URL here
+    else:
+        form = AddToCartForm()
+
+    context = {
+        'product': product,
+        'form': form,
+    }
+    return render(request, 'product.html', context)
+
+
+# old code
+
+# def shop(request):
+#     # return render (request,'shop.html')
+#     category = request.GET.get('category', None)
+#     if category:
+#         products = Product.objects.filter(category=category)
+#     else:
+#         products = Product.objects.all()
+
+#     paginator = Paginator(products, 1)  # Show 10 products per page
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+
+#     return render(request, 'shop.html', {'page_obj': page_obj})
+#     return render(request, 'shop.html', {'products': products})
+
+
+# def product(request, product_id):
+#     product = get_object_or_404(Product, pk=product_id)
+#     context = {
+#         'product': product
+#     }
+#     return render(request, 'product.html', context)
+
+
+# views.py in your shop app

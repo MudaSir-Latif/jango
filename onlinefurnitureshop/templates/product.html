@@ -150,7 +150,6 @@
 </section>
 {% endblock %} {% endcomment %}
 
-
 {% load static %}
 
 {% block content %}
@@ -167,37 +166,19 @@
     </div>
     <div class="single-pro-details">
         <h4>{{ product.title }}</h4>
-        <select name="" id="">
-            <option>Select Size</option>
-            {% for size in product.size_set.all %}
-            <option>{{ size.size }}</option>
-            {% endfor %}
-        </select>
-        <select name="" id="">
-            <option>Select Color</option>
-            {% for colour in product.colour_set.all %}
-            <option>{{ colour.colour }}</option>
-            {% endfor %}
-        </select>
-        <input type="number" id="quantity" value="1" min="1" max="{{ product.stock }}">
-        <a href="/cart"><button id="add-to-cart" class="normal">Add To Cart</button></a>
+        <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+            {% csrf_token %}
+            <label for="size">Select Size</label>
+            {{ form.size }}
+            <label for="colour">Select Color</label>
+            {{ form.colour }}
+            <label for="quantity">Quantity</label>
+            {{ form.quantity }}
+            <button type="submit" class="normal">Add To Cart</button>
+        </form>
         <h2>${{ product.price }}</h2>
         <p id="stock-message" style="color: red; display: none;">Out of stock</p>
         <h3 style="padding: 20px;">{{ product.description }}</h3>
-        
-        <script>
-            document.getElementById('add-to-cart').addEventListener('click', function(event) {
-                var maxStock = {{ product.stock }};
-                var quantity = document.getElementById('quantity').value;
-
-                if (quantity > maxStock) {
-                    document.getElementById('stock-message').style.display = 'block';
-                    event.preventDefault();
-                } else {
-                    document.getElementById('stock-message').style.display = 'none';
-                }
-            });
-        </script>
     </div>
 </section>
 {% endblock %}
