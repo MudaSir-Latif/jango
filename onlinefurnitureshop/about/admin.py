@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Product, Colour, Image, Size, Cart, Supplier, Order,CartItem
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_id', 'title', 'category', 'price', 'stock', 'waranty', 'discount', 'description')
+    list_display = ('product_id', 'title', 'category', 'price', 'stock', 'discount', 'description')
     search_fields = ('title', 'category', 'product_id')
     list_filter = ('category', 'price', 'stock')
     ordering = ('product_id',)

@@ -3,16 +3,6 @@ from about.models import CartItem, Size, Colour
 from django.core.exceptions import ValidationError
 
 
-# class AddToCartForm(forms.ModelForm):
-#     size = forms.ModelChoiceField(queryset=Size.objects.all())
-#     colour = forms.ModelChoiceField(queryset=Colour.objects.all())
-#     quantity = forms.IntegerField(min_value=1,max_value=3)
-
-#     class Meta:
-#         model = CartItem
-#         fields = ['size', 'colour', 'quantity']
-
-
 
 class AddToCartForm(forms.ModelForm):
     quantity = forms.IntegerField(min_value=1, max_value=3)

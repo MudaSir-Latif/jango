@@ -1,226 +1,113 @@
 {% extends "layout.html" %}
-
-
-{% comment %} {% extends "layout.html" %}
-
-{% block content %}
-
-<section id="prodetails" class="section-p1">
-    <div class="single-pro-image">
-      <img src="/static/img/products/2.jpg" width="100%" id="MainImg" alt="">
-
-      <div class="small-img-group">
-        <div class="small-img-col">
-          <img src="/static/img/products/2.jpg" width="100%" class="small-img" alt="" onclick = "myFunction">
-        </div>
-        <div class="small-img-col">
-          <img src="/static/img/products/2.jpg" width="100%" class="small-img" alt="" onclick = "myFunction">
-        </div>
-        <div class="small-img-col">
-          <img src="/static/img/products/2.jpg" width="100%" class="small-img" alt="" onclick = "myFunction">
-        </div>
-        <div class="small-img-col">
-          <img src="/static/img/products/2.jpg" width="100%" class="small-img" alt="" onclick = "myFunction">
-        </div>
-        
-      </div>
-    </div>
-
-    <div class="single-pro-details">
-      <h4>Men's Fashion T Shirt</h4>
-      
-      <select name="" id="">
-        <option>Select Size</option>
-        <option>Small</option>
-        <option>Large</option>
-      </select>
-
-      <select name="" id="">
-        <option>Select Color</option>
-        <option>White</option>
-        <option>Brown</option>
-      </select>
-
-      
-
-    <input type="number" value="1">
-    
-    <h2>$139.00</h2>
-
-    <a href="/cart"><button class="normal">Add To Cart</button></a>
-
-    </div>
-  </section>
-
-
-{% endblock  %} {% endcomment %}
-
-
-{% comment %} {% load static %}
-{% block content %}
-<section id="prodetails" class="section-p1">
-    <div class="single-pro-image">
-        <img src="{% if product.images.all %}{{ product.images.first.image.url }}{% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
-        <div class="small-img-group">
-            {% for image in product.images.all %}
-            <div class="small-img-col">
-                <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="single-pro-details">
-        <h4>{{ product.title }}</h4>
-        <select name="" id="">
-            <option>Select Size</option>
-            {% for size in product.size_set.all %}
-            <option>{{ size.size }}</option>
-            {% endfor %}
-        </select>
-        <select name="" id="">
-            <option>Select Color</option>
-            {% for colour in product.colour_set.all %}
-            <option>{{ colour.colour }}</option>
-            {% endfor %}
-        </select>
-        <select name="" id="">
-          <option>Select Quantity</option>
-          {% for stock in product.stock.all %}
-          <option>{{ stock.stock }}</option>
-          {% endfor %}
-        </select>
-        <h2>${{ product.price }}</h2>
-        <a href="/cart"><button class="normal">Add To Cart</button></a>
-        <h3 style="padding: 20px;">{{ product.description }}</h3>
-    </div>
-</section>
-{% endblock %} {% endcomment %}
-
 {% comment %} 
-{% load static %}
-{% block content %}
-<section id="prodetails" class="section-p1">
-    <div class="single-pro-image">
-        <img src="{% if product.images.all %}{{ product.images.first.image.url }}{% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
-        <div class="small-img-group" style="padding: 10px;">
-            {% for image in product.images.all %}
-            <div class="small-img-col">
-                <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="single-pro-details">
-        <h4>{{ product.title }}</h4>
-        <select name="" id="">
-            <option>Select Size</option>
-            {% for size in product.size_set.all %}
-            <option>{{ size.size }}</option>
-            {% endfor %}
-        </select>
-        <select name="" id="">
-            <option>Select Color</option>
-            {% for colour in product.colour_set.all %}
-            <option>{{ colour.colour }}</option>
-            {% endfor %}
-        </select>
 
-        <input type="number" id="quantity" value="1" min="1" max="3">
-        <a href="/cart"><button id="add-to-cart" class="normal">Add To Cart</button></a>
+ {% load static %}
+ 
+ {% block content %}
+     <section id="prodetails" class="section-p1">
+         <div class="single-pro-image">
+             <img src="{% if product.images.all %}{{ product.images.first.image.url }}  {% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
+             <div class="small-img-group" style="padding: 10px;">
+                 {% for image in product.images.all %}
+                 <div class="small-img-col">
+                     <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
+                 </div>
+                 {% endfor %}
+             </div>
+         </div>
+         <div class="single-pro-details">
+             <h4>{{ product.title }}</h4>
+             {% if form.errors %}
+                 <div class="alert alert-danger">
+                     {{ form.errors.quantity }}
+                 </div>
+             {% endif %}
+             <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+                 {% csrf_token %}
+                 {% if form.non_field_errors %}
+                     <div class="alert alert-danger">
+                         {{ form.non_field_errors }}
+                     </div>
+                 {% endif %}
+                 <label for="size">Select Size</label>
+                 {{ form.size }}
+                 <label for="colour">Select Color</label>
+                 {{ form.colour }}
+                 <label for="quantity">Quantity</label>
+                 {{ form.quantity }}
+                 <button type="submit" class="normal">Add To Cart</button>
+             </form>
+             {% if product.discount %}
+                 <h2><del>{{ product.price }} Rs</del> {{ product.get_discounted_price }} Rs</h2>
+             {% else %}
+                 <h2>{{ product.price }} Rs</h2>
+             {% endif %}
+             
+             <h3 style="padding: 20px;">{{ product.description }}</h3>
+         </div>
+     </section>
+ {% endblock %}
+  {% endcomment %}
 
-        <h2>${{ product.price }}</h2>
-        <p id="stock-message" style="color: red; display: none;">Out of stock</p>
-        <h3 style="padding: 20px;">{{ product.description }}</h3>
-
-
-      <script>
-            document.getElementById('add-to-cart').addEventListener('click', function(event) {
-                var maxStock = {{ product.stock }};
-                var quantity = document.getElementById('quantity').value;
-
-                if (quantity > maxStock) {
-                    document.getElementById('stock-message').style.display = 'block';
-                    event.preventDefault();
-                } else {
-                    document.getElementById('stock-message').style.display = 'none';
-                }
-            });
-        </script>
-    </div>
-</section>
-{% endblock %} {% endcomment %}
-{% comment %} 
 {% load static %}
 
 {% block content %}
-<section id="prodetails" class="section-p1">
-    <div class="single-pro-image" style="width: 50%">
-        <img src="{% if product.images.all %}{{ product.images.first.image.url }}  {% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
-        <div class="small-img-group" style="padding: 10px;">
-            {% for image in product.images.all %}
-            <div class="small-img-col">
-                <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
+    <section id="prodetails" class="section-p1">
+        <div class="single-pro-image">
+            <img src="{% if product.images.all %}{{ product.images.first.image.url }}{% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
+            <div class="small-img-group" style="padding: 10px;">
+                {% for image in product.images.all %}
+                <div class="small-img-col">
+                    <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
-    <div class="single-pro-details">
-        <h4>{{ product.title }}</h4>
-        <form method="post" action="{% url 'add_to_cart' product.product_id %}">
-            {% csrf_token %}
-            <label for="size">Select Size</label>
-            {{ form.size }}
-            <label for="colour">Select Color</label>
-            {{ form.colour }}
-            <label for="quantity">Quantity</label>
-            {{ form.quantity }}
-            <button type="submit" class="normal">Add To Cart</button>
-        </form>
-        <h2>${{ product.price }}</h2>
-        <p id="stock-message" style="color: red; display: none;">Out of stock</p>
-        <h3 style="padding: 20px;">{{ product.description }}</h3>
-    </div>
-</section>
-{% endblock %} {% endcomment %}
-{% load static %}
-
-{% block content %}
-<section id="prodetails" class="section-p1">
-    <div class="single-pro-image">
-        <img src="{% if product.images.all %}{{ product.images.first.image.url }}  {% else %}{% static 'img/products/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="{{ product.title }}">
-        <div class="small-img-group" style="padding: 10px;">
-            {% for image in product.images.all %}
-            <div class="small-img-col">
-                <img src="{{ image.image.url }}" width="100%" class="small-img" alt="{{ product.title }}" onclick="myFunction()">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="single-pro-details">
-        <h4>{{ product.title }}</h4>
-        <form method="post" action="{% url 'add_to_cart' product.product_id %}">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
+        <div class="single-pro-details">
+            <h4>{{ product.title }}</h4>
+            {% if form.errors %}
                 <div class="alert alert-danger">
-                    {{ form.non_field_errors }}
+                    {{ form.errors.quantity }}
                 </div>
             {% endif %}
-            <label for="size">Select Size</label>
-            {{ form.size }}
-            <label for="colour">Select Color</label>
-            {{ form.colour }}
-            <label for="quantity">Quantity</label>
-            {{ form.quantity }}
-            <button type="submit" class="normal">Add To Cart</button>
-        </form>
-        <h2>${{ product.price }}</h2>
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors.quantity }}
-            </div>
-        {% endif %}
-        <h3 style="padding: 20px;">{{ product.description }}</h3>
-    </div>
-</section>
-{% endblock %}
+            <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                <label for="size">Select Size</label>
+                {{ form.size }}
+                <label for="colour">Select Color</label>
+                {{ form.colour }}
+                <label for="quantity">Quantity</label>
+                {{ form.quantity }}
+                <button type="submit" class="normal">Add To Cart</button>
+            </form>
+            <h4 style="padding-top: 15px;">
+                {% if product.discount %}
+                    <del>{{ product.price }} Rs</del> {{ product.get_discounted_price }} Rs each
+                {% else %}
+                    {{ product.price }} Rs each
+                {% endif %}
+            </h4>
+            <h4>Total: <span id="total_price">{{ product.get_discounted_price }}</span> Rs</h4>
+            <h4 style="padding: 10px;">{{ product.description }}</h4>
+        </div>
+    </section>
+    <script>
+        const quantityField = document.querySelector('input[name="quantity"]');
+        const totalPriceField = document.getElementById('total_price');
+        const productPrice = {{ product.get_discounted_price }};
 
+        quantityField.addEventListener('input', function() {
+            const quantity = parseInt(this.value);
+            if (!isNaN(quantity) && quantity > 0) {
+                totalPriceField.textContent = (productPrice * quantity).toFixed(2);
+            } else {
+                totalPriceField.textContent = productPrice.toFixed(2);
+            }
+        });
+    </script>
+{% endblock %}

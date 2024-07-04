@@ -8,13 +8,17 @@ class Product(models.Model):
     stock = models.IntegerField()
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
-    waranty = models.CharField(max_length=100,null=True, blank=True, default=None)
-    discount = models.CharField(max_length=100,null=True, blank=True, default=None)
+    discount = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, default=0.00)  # Percentage discount
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
 
     def __str__(self):
         return self.title
+
+    def get_discounted_price(self):
+        if self.discount:
+            return self.price * (1 - (self.discount / 100))
+        return self.price
 
 class Colour(models.Model):
     colour_id = models.AutoField(primary_key=True)
@@ -64,8 +68,9 @@ class CartItem(models.Model):
         return f"CartItem ID: {self.cart_item_id}, Product: {self.product.title}, Quantity: {self.quantity}"
 
     def get_total_price(self):
-        return self.product.price * self.quantity
-    
+        discounted_price = self.product.get_discounted_price()
+        return discounted_price * self.quantity
+
 
 
 class Supplier(models.Model):
