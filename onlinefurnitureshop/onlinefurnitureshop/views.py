@@ -5,7 +5,7 @@ from about.models import Product
 
 
 
-
+# @login_required
 def home(request):
     discounted_products = Product.objects.filter(discount__gt=0)
     low_stock_products = Product.objects.filter(stock__lt=10)

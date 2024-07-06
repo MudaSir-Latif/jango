@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    
+    def _str_(self):
+        return self.city
+
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     stock = models.IntegerField()
@@ -47,10 +55,10 @@ class Size(models.Model):
         return self.size
 
 
-    
 
 class Cart(models.Model):
     cart_id = models.AutoField(primary_key=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, default=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, default=1)  # Assuming user ID 1 exists
 
     def __str__(self):
@@ -58,11 +66,12 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart_item_id = models.AutoField(primary_key=True)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
     quantity = models.PositiveIntegerField(default=1)
     size = models.ForeignKey(Size, on_delete=models.CASCADE)
     colour = models.ForeignKey(Colour, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return f"CartItem ID: {self.cart_item_id}, Product: {self.product.title}, Quantity: {self.quantity}"
@@ -90,6 +99,9 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-
+    status_last_updated = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
         return f"Order ID: {self.order_id}, Status: {self.delivery_status}, Date: {self.order_date}, Amount: {self.total_amount}"
+
+
