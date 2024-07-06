@@ -58,7 +58,7 @@ class Size(models.Model):
 
 class Cart(models.Model):
     cart_id = models.AutoField(primary_key=True)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, default=7)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, default=1)  # Assuming user ID 1 exists
 
     def __str__(self):

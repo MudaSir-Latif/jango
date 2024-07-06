@@ -82,8 +82,11 @@ def product_detail(request, product_id):
     }
     return render(request, 'product.html', context)
 
+
+
 from django.utils import timezone
 from django.contrib import messages
+from django.db import transaction
 
 def get_available_supplier():
     suppliers = Supplier.objects.all()
@@ -109,17 +112,20 @@ def order_view(request, cart_id):
             'cart_items': cart_items,
             'total_amount': total_amount,
             'error': 'No available suppliers at the moment. Please try again later.',
-            'created_at':created_at
+            'created_at': created_at
         })
     
     if request.method == 'POST':
-        order = Order.objects.create(
-            delivery_status='Pending',
-            order_date=timezone.now(),
-            total_amount=total_amount,
-            cart=cart,
-            supplier=supplier
-        )
+        with transaction.atomic():
+            order = Order.objects.create(
+                delivery_status='Pending',
+                order_date=timezone.now(),
+                total_amount=total_amount,
+                cart=cart,
+                supplier=supplier
+            )
+            # Clear cart items
+            cart_items.delete()
         
         return redirect('home')
 
@@ -132,3 +138,56 @@ def order_view(request, cart_id):
     }
     print(context)
     return render(request, 'order.html', context)
+
+
+
+# from django.utils import timezone
+# from django.contrib import messages
+
+# def get_available_supplier():
+#     suppliers = Supplier.objects.all()
+#     for supplier in suppliers:
+#         ongoing_orders_count = Order.objects.filter(supplier=supplier, delivery_status='Pending').count()
+#         if ongoing_orders_count < 4:
+#             return supplier
+#     return None  # Return None if no supplier is available (handle this case in your view)
+
+# @login_required
+# def order_view(request, cart_id):
+#     created_at = timezone.now().date()
+#     cart = get_object_or_404(Cart, pk=cart_id, user=request.user)
+#     cart_items = cart.cart_items.all()
+#     total_amount = sum(item.product.get_discounted_price() * item.quantity for item in cart_items)
+    
+#     supplier = get_available_supplier()
+    
+#     if not supplier:
+#         # Handle the case where no supplier is available
+#         return render(request, 'order.html', {
+#             'cart': cart,
+#             'cart_items': cart_items,
+#             'total_amount': total_amount,
+#             'error': 'No available suppliers at the moment. Please try again later.',
+#             'created_at':created_at
+#         })
+    
+#     if request.method == 'POST':
+#         order = Order.objects.create(
+#             delivery_status='Pending',
+#             order_date=timezone.now(),
+#             total_amount=total_amount,
+#             cart=cart,
+#             supplier=supplier
+#         )
+        
+#         return redirect('home')
+
+#     context = {
+#         'cart': cart,
+#         'cart_items': cart_items,
+#         'total_amount': total_amount,
+#         'supplier': supplier,
+#         'created_at': created_at
+#     }
+#     print(context)
+#     return render(request, 'order.html', context)
