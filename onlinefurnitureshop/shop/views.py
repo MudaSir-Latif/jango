@@ -95,6 +95,7 @@ def get_available_supplier():
         if ongoing_orders_count < 4:
             return supplier
     return None  # Return None if no supplier is available (handle this case in your view)
+from django.urls import reverse
 
 @login_required
 def order_view(request, cart_id):
@@ -112,7 +113,8 @@ def order_view(request, cart_id):
             'cart_items': cart_items,
             'total_amount': total_amount,
             'error': 'No available suppliers at the moment. Please try again later.',
-            'created_at': created_at
+            'created_at': created_at,
+            'check': False  # Ensure the success flag is False in this case
         })
     
     if request.method == 'POST':
@@ -127,15 +129,20 @@ def order_view(request, cart_id):
             # Clear cart items
             cart_items.delete()
         
-        return redirect('home')
+        return redirect('order_success')  # Redirect to the order success page
 
     context = {
         'cart': cart,
         'cart_items': cart_items,
         'total_amount': total_amount,
         'supplier': supplier,
-        'created_at': created_at
+        'created_at': created_at,
+        'check': False  # Ensure the success flag is False in this case
     }
-    print(context)
     return render(request, 'order.html', context)
+
+
+def order_success(request):
+    return render(request, 'order_success.html')
+
 

@@ -5,35 +5,18 @@
 
   <!-- bhai ye hai bawal -->
   <section id="form-details">
-   <form action="">
-    <h2>We love to hear from you</h2>
-    <input type="text" placeholder="Your Name">
-    <input type="text" placeholder="E-mail">
-    <input type="text" placeholder="Subject">
-    <input type="text" placeholder="Your Message">
-    <button class="normal">Submit</button>
-   </form>
+    <form method="post">
+      {% csrf_token %}
+      <h2>We love to hear from you</h2>
+      <textarea name="message" placeholder="Your Message"></textarea>
+      <a href="{% url 'home'  %}"><button type="submit" class="normal">Submit</button></a>
+  </form>
 
    <div class="people">
     <div>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GcM5oHBxq5MXq6C4gFEY3KBTsKapINJmSQ&s"  alt="">
      <p><samp>Saif</samp>, Senior DBMS Engineer <br> Phone: +92 321 3856601 <br> Email: abc@example.com</p>
     </div>
-
-    <div>
-     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GcM5oHBxq5MXq6C4gFEY3KBTsKapINJmSQ&s" alt="">
-     <p><samp>Baseer</samp>, Senior DBMS Engineer <br> Phone: +92 323 2030337 <br> Email: abc@example.com</p>
-    </div>
-
-    <div>
-     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GcM5oHBxq5MXq6C4gFEY3KBTsKapINJmSQ&s" alt="">
-     <p><samp>Owais</samp>, Senior DBMS Engineer <br> Phone: +92 333 0203085 <br> Email: abc@example.com</p>
-    </div>
-
-    <div>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GcM5oHBxq5MXq6C4gFEY3KBTsKapINJmSQ&s" alt="">
-      <p><samp>Mudassir</samp>, Senior DBMS Engineer <br> Phone: +92 335 2597646 <br> Email: abc@example.com</p>
-     </div>
     
    </div>
   </section>

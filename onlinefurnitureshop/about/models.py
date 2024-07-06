@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.TextField()
+    msg = models.TextField(null=True, blank=True, default=None)
     city = models.CharField(max_length=100)
     
     def _str_(self):
