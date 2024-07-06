@@ -808,58 +808,14 @@ footer .copyrigth {
 }
 
 /* Contact Page */
-#contact-datails {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
-#contact-details .details {
-  width: 40%;
-}
 
-#contact-details .details span,
-#form-details form span {
-  font-size: 12px;
-}
-
-#contact-details .details h2,
 #form-details form h2 {
   font-size: 26px;
   line-height: 35px;
   padding: 20px 0;
 }
 
-#contact-details .details h3 {
-  font-size: 16px;
-  padding-bottom: 15px;
-}
-
-#contact-datails .details li {
-  list-style: none;
-  display: flex;
-  padding: 10px 0;
-}
-
-#contact-datails .details li i {
-  font-size: 14px;
-  padding-right: 22px;
-}
-
-#contact-datails .details li p {
-  margin: 0;
-  font-size: 14px;
-}
-
-#contact-datails .map {
-  width: 55%;
-  height: 400px;
-}
-
-#contact-datails .map iframe {
-  width: 100%;
-  height: 100%;
-}
 
 #form-details form {
   width: 60%;
@@ -872,7 +828,7 @@ footer .copyrigth {
   display: flex;
   justify-content: space-between;
   margin: 30px;
-  padding: 80px;
+  padding: 20px;
   border: 1px solid #e1e1e1;
 }
 
@@ -1267,41 +1223,16 @@ footer .copyrigth {
 
   /* Contact Page */
 
-  #contact-datails {
-    flex-direction: column;
-  }
-
-  #contact-datails .details {
-    width: 100%;
-    margin-bottom: 30px;
-  }
-
-  #contact-datails .map {
-    width: 100%;
-  }
-
   #form-details {
     margin: 10px;
-    padding: 30px 10px;
+    padding: 0;
     flex-wrap: wrap;
-  }
+    background-color: #04AA6D !important; 
+  } 
 
   #form-details form {
     width: 100%;
     margin-bottom: 30px;
-  }
-
-  #cart-add {
-    flex-direction: column;
-  }
-
-  #coupon {
-    width: 100%;
-  }
-
-  #sudtotal {
-    width: 100%;
-    padding: 20px;
   }
 }
 
