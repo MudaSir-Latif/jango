@@ -25,6 +25,7 @@ def cart(request):
 
     return render(request, 'cart.html', context)
 
+
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, cart_item_id=item_id, cart__user=request.user)
     
